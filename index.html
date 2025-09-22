@@ -122,7 +122,7 @@
         .user-info { font-size: 14px; color: #d1d5db; }
         .user-info #user-email { font-weight: 600; color: var(--header-text); }
         .user-info #user-role {
-            background-color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.1);
             padding: 2px 8px;
             border-radius: 10px;
             font-size: 12px;
@@ -164,15 +164,19 @@
         
         .btn.ghost {
             background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
         }
-        .btn.ghost:hover { background-color: #e0e7ff; }
+        .btn.ghost:hover { background-color: #f9fafb; }
+        
+        #logout-btn.btn.ghost { color: var(--header-text); border-color: rgba(255,255,255,0.3); }
+        #logout-btn.btn.ghost:hover { background-color: rgba(255,255,255,0.1); }
 
         .btn.danger { background-color: var(--danger-color); }
         .btn.danger:hover { background-color: var(--danger-hover); }
         
         .btn.small { padding: 6px 12px; font-size: 13px; }
+        .btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
 
         input, select, textarea {
             width: 100%;
@@ -219,6 +223,7 @@
             gap: 12px;
             margin-bottom: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
         .search-box {
             display: flex;
@@ -237,7 +242,7 @@
         /* Dashboard Specific */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
         .dashboard-card {
@@ -267,6 +272,12 @@
         .list-item-value.secondary { color: var(--text-color); }
 
         /* Lead Detail Page */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            align-items: flex-start;
+        }
         .lead-detail-header {
             display: flex;
             justify-content: space-between;
@@ -337,6 +348,19 @@
             cursor: pointer;
         }
         #csv-upload-area:hover { border-color: var(--primary-color); }
+        
+        @media (max-width: 900px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .header-left { flex-grow: 1; }
+            .navbar { display: none; /* Could implement a hamburger menu here */ }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .form-grid-2 { grid-template-columns: 1fr; }
+        }
+
     </style>
 </head>
 <body>
@@ -344,7 +368,7 @@
     <!-- LOGIN VIEW -->
     <div id="login-view">
         <div class="login-container">
-            <div class="login-card">
+            <div class.login-card">
                 <div class="login-logo">
                     <svg fill="var(--primary-color)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
                     <h1>LeadFlow</h1>
