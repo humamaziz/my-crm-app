@@ -13,12 +13,12 @@ function initializeApp() {
     // --- PART 1: FIREBASE SETUP ---
     // PASTE YOUR FIREBASE CONFIGURATION OBJECT HERE.
     const firebaseConfig = {
-    apiKey: "AIzaSyB0lWOPYmPsNFTdOIqdhAPmgzN_83DMHds",
-    authDomain: "leadflow-crm-app.firebaseapp.com",
+    apiKey: "JHBJHGFJFGGBJGVHFHFBNMN",
+    authDomain: "https://github.com/humamaziz/my-crm-app",
     projectId: "leadflow-crm-app",
-    storageBucket: "leadflow-crm-app.firebasestorage.app",
-    messagingSenderId: "826778688600",
-    appId: "1:826778688600:web:25aef6586f9cfffeb43e2d"
+    storageBucket: "https://github.com/humamaziz/my-crm-app",
+    messagingSenderId: "2654684512558465532",
+    appId: "1:5346546512313465:web:545dnvkjshvv5snhvkjb"
   };
     // --- INITIALIZE FIREBASE (ONLY ONCE) ---
     if (!firebase.apps.length) {
@@ -519,3 +519,4 @@ function initializeApp() {
     loginForm.addEventListener('submit', handleLoginSubmit);
     logoutBtn.addEventListener('click', logout);
 }
+
