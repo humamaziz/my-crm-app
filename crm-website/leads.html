@@ -1,0 +1,29 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Leads</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="renderLeadsPage()">
+  <div class="navbar"></div>
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>Leads</h2>
+      <div>
+        <a class="btn" href="add_lead.html">+ Add Lead</a>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="searchBox" class="input search" placeholder="Search leads..." oninput="renderLeadsPage()">
+      <button class="btn ghost" onclick="renderLeadsPage()">Refresh</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="leadsTable">
+        <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Instagram</th><th>Organisation</th><th>Product</th><th>Type</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

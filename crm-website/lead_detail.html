@@ -1,0 +1,49 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Lead</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="renderLeadDetailPage()">
+  <div class="navbar"></div>
+
+  <div id="content" class="container">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2 id="leadName">—</h2>
+        <div class="muted">Owner: <span id="leadOwner">—</span></div>
+      </div>
+      <div>
+        <button class="btn" onclick="window.open('fundraiser_create.html?leadId='+new URLSearchParams(location.search).get('id'),'_blank')">+ Add Fundraiser</button>
+        <button class="btn ghost" onclick="location.href='leads.html'">Back</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <p><b>Organisation:</b> <span id="leadOrg"></span></p>
+      <p><b>Product:</b> <span id="leadProd"></span></p>
+      <p><b>Type:</b> <span id="leadType"></span></p>
+      <p><b>Instagram:</b> <span id="leadInsta"></span></p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:12px;margin-top:12px">
+      <div class="card">
+        <h4>Activity Log</h4>
+        <ul id="activityList" class="activity-list"></ul>
+
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <select id="activityType" class="input" style="width:180px">
+            <option>DMed</option><option>Called</option><option>Emailed</option><option>Follow-up</option><option>Success</option><option>Not Interested</option>
+          </select>
+          <input id="activityNote" class="input" placeholder="Note (optional)">
+          <button class="btn" onclick="(function(){ const id = new URLSearchParams(location.search).get('id'); submitLeadActivity(id, document.getElementById('activityType').value, document.getElementById('activityNote').value); document.getElementById('activityNote').value=''; })()">Save Activity</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4>Fundraisers</h4>
+        <div id="leadFundraisers"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space App - Fundraiser Details</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Navbar included on all pages -->
+<div class="navbar">
+    <div class="logo">Space</div>
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="calls.html">Calls</a>
+        <a href="leads.html">Leads</a>
+        <a href="fundraisers.html">Fundraisers</a>
+        <a href="payments.html">Payments</a>
+        <a href="admin.html" id="admin-link">Admin</a>
+    </div>
+    <div class="user-info">
+        <span id="user-email">user@example.com</span> | 
+        <span id="user-role">executive</span>
+        <button id="logout-btn">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="fundraiser-header">
+        <h1 id="fundraiser-name">Fundraiser Name</h1>
+        <div class="fundraiser-actions">
+            <button id="edit-fundraiser-btn">Edit</button>
+            <button id="publish-fundraiser-btn">Publish</button>
+            <button id="back-to-lead-btn">Back to Lead</button>
+        </div>
+    </div>
+
+    <div class="fundraiser-banner">
+        <img id="fundraiser-banner-img" src="assets/banner-placeholder.png" alt="Fundraiser Banner">
+    </div>
+
+    <div class="fundraiser-info">
+        <p id="fundraiser-description">Campaign description goes here...</p>
+        <p><strong>Organisation:</strong> <span id="fundraiser-org">NGO Name</span></p>
+        <p><strong>Product / Campaign:</strong> <span id="fundraiser-product">Campaign Name</span></p>
+        <p><strong>Units:</strong> <span id="fundraiser-units">100</span></p>
+        <p><strong>Target Amount:</strong> ₹<span id="fundraiser-target">50000</span></p>
+        <p><strong>Amount Collected:</strong> ₹<span id="fundraiser-collected">32000</span></p>
+        <div class="progress-bar">
+            <div id="fundraiser-progress" style="width: 64%;"></div>
+        </div>
+        <p><strong>End Date:</strong> <span id="fundraiser-end-date">2025-12-31</span></p>
+    </div>
+
+    <div class="fundraiser-payments">
+        <h2>Payments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Supporter Name</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="payments-table-body">
+                <!-- Payments will be injected here by JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    // Example JS hooks to populate the page dynamically
+    document.addEventListener("DOMContentLoaded", function() {
+        const fundraiserData = {
+            name: "Clean Water Drive",
+            description: "Providing clean water in rural areas",
+            organisation: "NGO WaterAid",
+            product: "Clean Water Campaign",
+            units: 50,
+            target: 50000,
+            collected: 32000,
+            endDate: "2025-12-31",
+            banner: "assets/banner-placeholder.png",
+            payments: [
+                { name: "Alice", amount: 5000, method: "Bank", date: "2025-01-10" },
+                { name: "Bob", amount: 2000, method: "Razorpay", date: "2025-01-11" },
+                { name: "Charlie", amount: 1500, method: "Bank", date: "2025-01-12" }
+            ]
+        };
+
+        document.getElementById("fundraiser-name").innerText = fundraiserData.name;
+        document.getElementById("fundraiser-description").innerText = fundraiserData.description;
+        document.getElementById("fundraiser-org").innerText = fundraiserData.organisation;
+        document.getElementById("fundraiser-product").innerText = fundraiserData.product;
+        document.getElementById("fundraiser-units").innerText = fundraiserData.units;
+        document.getElementById("fundraiser-target").innerText = fundraiserData.target;
+        document.getElementById("fundraiser-collected").innerText = fundraiserData.collected;
+        document.getElementById("fundraiser-end-date").innerText = fundraiserData.endDate;
+        document.getElementById("fundraiser-banner-img").src = fundraiserData.banner;
+        document.getElementById("fundraiser-progress").style.width = (fundraiserData.collected / fundraiserData.target * 100) + "%";
+
+        const tbody = document.getElementById("payments-table-body");
+        fundraiserData.payments.forEach(payment => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${payment.name}</td><td>₹${payment.amount}</td><td>${payment.method}</td><td>${payment.date}</td>`;
+            tbody.appendChild(tr);
+        });
+
+        // Example buttons
+        document.getElementById("back-to-lead-btn").addEventListener("click", function() {
+            // Go back to the lead profile
+            window.location.href = "lead-details.html";
+        });
+        document.getElementById("edit-fundraiser-btn").addEventListener("click", function() {
+            window.location.href = "fundraiser_create.html";
+        });
+    });
+</script>
+</body>
+</html>

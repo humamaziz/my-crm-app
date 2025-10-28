@@ -1,0 +1,53 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Payments</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="renderPaymentsPage()">
+  <div class="navbar"></div>
+  <div class="container">
+    <h2>Payments</h2>
+    <div class="card">
+      <h4>Record Manual Payment</h4>
+      <form onsubmit="event.preventDefault(); const p=formToPayment(this); alert('Payment recorded'); renderPaymentsPage(); this.reset();">
+        <div class="form-grid">
+          <div><label>Fundraiser</label><select id="payFundSelect" name="fundId" class="input">${''}</select></div>
+          <div><label>Donor</label><input name="donor" class="input" required></div>
+          <div><label>Amount</label><input name="amount" type="number" class="input" required></div>
+          <div><label>Date</label><input name="date" type="datetime-local" class="input"></div>
+          <div style="grid-column:1/-1"><label>Method</label><input name="method" class="input"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" type="submit">Record Payment</button></div>
+      </form>
+    </div>
+
+    <div class="table-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Fundraiser</th><th>Method</th><th>Recorded By</th></tr></thead>
+        <tbody id="paymentsTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+/* Small helper to populate fund select and record payment */
+function formToPayment(form){
+  const fundId = form.fundId.value;
+  const donor = form.donor.value;
+  const amount = Number(form.amount.value||0);
+  const date = form.date.value || new Date().toISOString();
+  const method = form.method.value || 'manual';
+  const rec = addPaymentToFund({fundId, donor, amount, date, method, note: ''});
+  renderPaymentsPage();
+  return rec;
+}
+
+/* populate fund select on load */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sel = document.getElementById('payFundSelect');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">-- Select Fundraiser --</option>';
+  load(FUND_KEY).forEach(f => sel.innerHTML += `<option value="${f.id}">${f.title} (${f.amount})</option>`);
+});
+</script>
+</html>

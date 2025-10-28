@@ -1,0 +1,72 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calls</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="protectPage()">
+  <div id="navbar" class="navbar"></div>
+  <nav class="navbar">
+    <div class="nav-left">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="leads.html">Leads</a>
+        <a href="fundraisers.html">Fundraisers</a>
+        <a href="payments.html">Payments</a>
+        <a href="calls.html">Calls</a>
+        <a href="admin.html" id="admin-link">Admin Panel</a>
+    </div>
+    <div class="nav-right">
+        <span id="user-email"></span> | <span id="user-role"></span>
+        <button id="logout-btn">Logout</button>
+    </div>
+</nav>
+
+
+  <main class="container">
+    <h1>Calls</h1>
+    <p>This tab lists all recent lead activities (calls, DMs, followups, etc.).</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lead Name</th>
+          <th>Activity</th>
+          <th>Note</th>
+          <th>Date</th>
+          <th>Executive</th>
+        </tr>
+      </thead>
+      <tbody id="calls-table-body"></tbody>
+    </table>
+  </main>
+
+<script src="script.js"></script>
+<script>
+// Render calls tab
+function renderCalls() {
+  const table = document.getElementById("calls-table-body");
+  if (!table) return;
+
+  const calls = getData("calls");
+  table.innerHTML = "";
+
+  calls.forEach(c => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${c.leadName}</td>
+      <td>${c.type}</td>
+      <td>${c.note || ""}</td>
+      <td>${c.date}</td>
+      <td>${c.executive}</td>
+    `;
+    table.appendChild(row);
+  });
+}
+document.addEventListener("DOMContentLoaded", renderCalls);
+</script>
+</body>
+</html>

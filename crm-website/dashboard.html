@@ -1,0 +1,26 @@
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script>
+</head>
+<body onload="renderDashboard()">
+  <div class="navbar"></div>
+
+  <div class="container">
+    <h2>Dashboard</h2>
+    <div class="cards">
+      <div class="card"><h3>Total Leads</h3><p id="totalLeads">0</p></div>
+      <div class="card"><h3>Total Fundraisers</h3><p id="totalFundraisers">0</p></div>
+      <div class="card"><h3>Total Payments</h3><p id="totalPayments">₹0</p></div>
+      <div class="card"><h3>Total Activities</h3><p id="totalActivities">0</p></div>
+    </div>
+    <div class="card">
+      <h3>Quick Actions</h3>
+      <div style="display:flex;gap:8px">
+        <a class="btn" href="add_lead.html">Add Lead</a>
+        <a class="btn" href="fundraiser_create.html">Create Fundraiser (manual)</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

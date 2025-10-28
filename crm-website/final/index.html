@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadFlow CRM</title>
+    
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+    
+    <!-- Main Application Script -->
+    <script src="script.js" defer></script>
+    
+    <style>
+        :root{--primary-color:#4f46e5;--primary-hover:#4338ca;--secondary-color:#10b981;--danger-color:#ef4444;--danger-hover:#dc2626;--background-color:#f8fafc;--text-color:#1f2937;--muted-text-color:#6b7280;--card-background:#ffffff;--border-color:#e5e7eb;--header-background:#ffffff;--header-text:#1f2937;--kpi-icon-bg-1:#e0e7ff;--kpi-icon-color-1:#4f46e5;--kpi-icon-bg-2:#d1fae5;--kpi-icon-color-2:#059669;--kpi-icon-bg-3:#ffedd5;--kpi-icon-color-3:#f97316;--kpi-icon-bg-4:#fee2e2;--kpi-icon-color-4:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background-color:var(--background-color);color:var(--text-color);line-height:1.5}
+        a{text-decoration:none;color:var(--primary-color);font-weight:500} a:hover{text-decoration:underline}
+        .login-container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:var(--background-color)}
+        .login-card{background-color:var(--card-background);padding:40px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.05);width:100%;max-width:400px;text-align:center}
+        .login-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}.login-logo svg{width:40px;height:40px}.login-logo h1{font-size:28px;font-weight:700;color:var(--text-color)}.login-card h2{margin-bottom:24px;color:var(--muted-text-color);font-weight:500}
+        .form-group{text-align:left;margin-bottom:20px}.form-group label{display:block;margin-bottom:8px;font-weight:600;font-size:14px}
+        #app-container{display:none}
+        .header{background-color:var(--header-background);color:var(--header-text);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid var(--border-color)}
+        .header-left{display:flex;align-items:center;gap:24px}.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px;color:var(--primary-color)}.logo svg{width:32px;height:32px}.navbar{display:flex;gap:8px}.nav-link{color:var(--muted-text-color);text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:500;transition:background-color .2s,color .2s}.nav-link:hover{background-color:#f3f4f6;color:var(--text-color)}.nav-link.active{background-color:var(--primary-color);color:#fff}
+        .header-right{display:flex;align-items:center;gap:16px}.user-info{font-size:14px;color:var(--muted-text-color)}.user-info #user-email{font-weight:600;color:var(--text-color)}.user-info #user-role{background-color:#eef2ff;color:var(--primary-color);padding:2px 8px;border-radius:10px;font-size:12px;text-transform:capitalize}
+        main{padding:24px;max-width:1600px;margin:0 auto}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.page-header h1{font-size:28px;font-weight:700}
+        .btn{padding:10px 18px;background-color:var(--primary-color);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s}.btn:hover{background-color:var(--primary-hover)}.btn.ghost{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.btn.ghost:hover{background-color:#f9fafb}
+        .btn.danger{background-color:var(--danger-color)}.btn.danger:hover{background-color:var(--danger-hover)}.btn.small{padding:6px 12px;font-size:13px}.btn:disabled{background-color:#9ca3af;cursor:not-allowed}
+        input,select,textarea{width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background-color:#fff}input:focus,select:focus,textarea:focus{outline:0;border-color:var(--primary-color);box-shadow:0 0 0 2px #c7d2fe}
+        label{font-weight:600;margin-bottom:6px;display:block;font-size:14px;color:#374151}
+        .card{background-color:var(--card-background);padding:24px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--border-color);margin-bottom:24px}
+        table{width:100%;border-collapse:collapse;background-color:var(--card-background);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--border-color)}th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border-color)}thead{background-color:#f9fafb}th{font-size:13px;font-weight:600;color:var(--muted-text-color);text-transform:uppercase;letter-spacing:.5px}tbody tr:last-child td{border-bottom:none}tbody tr:hover{background-color:#f9fafb}td{font-size:14px;color:#374151}
+        .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:24px}
+        .kpi-card{background-color:#fff;border-radius:12px;border:1px solid var(--border-color);padding:24px;display:flex;align-items:center;gap:20px}
+        .kpi-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .kpi-card:nth-child(1) .kpi-icon{background-color:var(--kpi-icon-bg-1);color:var(--kpi-icon-color-1)}
+        .kpi-card:nth-child(2) .kpi-icon{background-color:var(--kpi-icon-bg-2);color:var(--kpi-icon-color-2)}
+        .kpi-card:nth-child(3) .kpi-icon{background-color:var(--kpi-icon-bg-3);color:var(--kpi-icon-color-3)}
+        .kpi-card:nth-child(4) .kpi-icon{background-color:var(--kpi-icon-bg-4);color:var(--kpi-icon-color-4)}
+        .kpi-info h3{font-size:28px;font-weight:700;color:var(--text-color)}
+        .kpi-info p{font-size:14px;color:var(--muted-text-color);margin:0}
+        .filter-card{padding:16px 24px}
+        .filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+        .detail-grid{display:grid;grid-template-columns:1fr 400px;gap:24px;align-items:flex-start}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .status-badge{padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;text-transform:capitalize}
+        .status-badge.dmed{background-color:#e0e7ff;color:#4338ca}
+        .status-badge.success{background-color:#d1fae5;color:#065f46}
+        .status-badge.new{background-color:#f3f4f6;color:#4b5563}
+        @media (max-width:1200px){.detail-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div id="login-view">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-logo">
+                    <svg fill="var(--primary-color)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
+                    <h1>LeadFlow</h1>
+                </div>
+                <h2 id="login-title">Login to your account</h2>
+                <form id="login-form">
+                    <div id="name-group" class="form-group" style="display: none;">
+                        <label for="name">Full Name</label><input type="text" id="name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label><input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label><input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" id="login-button" class="btn" style="width: 100%;">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="app-container" style="display: none;">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
+                    <span>LeadFlow</span>
+                </div>
+                <nav id="navbar" class="navbar"></nav>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="user-email"></span> | <span id="user-role"></span>
+                </div>
+                <button id="logout-btn" class="btn small ghost">Logout</button>
+            </div>
+        </header>
+        <main id="main-content"></main>
+    </div>
+</body>
+</html>
+

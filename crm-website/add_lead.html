@@ -1,0 +1,27 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Add Lead</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="requireAuth(); renderNav(); populateCampaignSelect('campaignSelect')">
+  <div class="navbar"></div>
+  <div class="container">
+    <h2>Add Lead</h2>
+    <form onsubmit="event.preventDefault(); handleAddLeadForm(this);">
+      <div class="form-grid">
+        <div><label>First Name</label><input name="name" class="input" required></div>
+        <div><label>Campaign (Organisation / Product / Type)</label><select id="campaignSelect" name="campaign" class="input" required></select></div>
+        <div><label>Phone</label><input name="phone" class="input" placeholder="Phone (optional if email/instagram provided)"></div>
+        <div><label>Email</label><input name="email" class="input" type="email" placeholder="Email (optional)"></div>
+        <div><label>Instagram Handle</label><input name="instagram" class="input" placeholder="@handle or full url (optional)"></div>
+        <div><label>Lead Code (optional)</label><input name="leadCode" class="input"></div>
+        <div style="grid-column:1/-1"><label>Source Code (optional)</label><input name="sourceCode" class="input"></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn ghost" type="button" onclick="location.href='leads.html'">Cancel</button>
+        <button class="btn" type="submit">Save Lead</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Create Fundraiser</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="renderFundraiserCreatePage()">
+  <div class="navbar"></div>
+  <div class="container">
+    <h2 id="leadSummary">Create Fundraiser</h2>
+    <form id="fundForm" onsubmit="event.preventDefault(); submitFundraiserForm(this);">
+      <input type="hidden" id="fundLeadId" name="leadId">
+      <div class="form-grid">
+        <div><label>Title</label><input id="fundTitle" name="title" class="input" required></div>
+        <div><label>Unit</label><input id="fundUnit" name="unit" class="input"></div>
+        <div><label>Target Amount</label><input id="fundAmount" name="amount" class="input" type="number" required></div>
+        <div><label>Minimum Donation</label><input id="fundMinDonation" name="minDonation" class="input" type="number"></div>
+        <div><label>URL (public page or payment link)</label><input id="fundUrl" name="url" class="input"></div>
+        <div><label>Razorpay Payment Page ID</label><input id="fundRazorId" name="razorId" class="input"></div>
+        <div><label>End Date</label><input id="fundEndDate" name="endDate" class="input" type="date"></div>
+        <div><label>Amount Collected (manual)</label><input id="fundCollected" name="collected" class="input" type="number"></div>
+        <div style="grid-column:1/-1"><label>Banner Image (URL)</label><input id="fundBanner" name="banner" class="input"></div>
+        <div style="grid-column:1/-1"><label>Description</label><textarea id="fundDesc" name="desc" class="input" rows="4"></textarea></div>
+        <div style="grid-column:1/-1">
+          <label><input id="fundPublic" name="isPublic" type="checkbox"> Make this fundraiser public</label><br>
+          <label><input id="fundSupporters" name="showSupporters" type="checkbox"> Show supporters on public page</label><br>
+          <label><input id="fundProgress" name="showProgress" type="checkbox"> Show progress bar on public page</label>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn ghost" type="button" onclick="window.close()">Cancel</button>
+        <button class="btn" type="submit">Create Fundraiser</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

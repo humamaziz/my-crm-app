@@ -1,0 +1,53 @@
+
+
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Admin</title><link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head>
+<body onload="renderAdmin()">
+  <div class="navbar"></div>
+  <div class="container">
+    <h2>Admin Panel</h2>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Create Executive / Admin</h3>
+      <form onsubmit="event.preventDefault(); adminCreateUserForm(this);">
+        <div class="form-grid">
+          <div><label>Name</label><input name="name" class="input" required></div>
+          <div><label>Email</label><input name="email" class="input" type="email" required></div>
+          <div><label>Password</label><input name="password" class="input" type="password" required></div>
+          <div><label>Role</label><select name="role" class="input"><option value="executive">Executive</option><option value="admin">Admin</option></select></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" type="submit">Create</button></div>
+      </form>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Create Campaign</h3>
+      <form onsubmit="event.preventDefault(); adminCreateCampaignForm(this);">
+        <div class="form-grid">
+          <div><label>Organisation (NGO)</label><input name="organisation" class="input" required></div>
+          <div><label>Product (Campaign Name)</label><input name="product" class="input" required></div>
+          <div><label>Lead Type</label><select name="leadType" class="input"><option>Fundraiser</option><option>Calling</option></select></div>
+          <div><label>--</label><div></div></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn" type="submit">Create Campaign</button></div>
+      </form>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Executives</h3>
+      <div id="executiveList" style="margin-top:8px"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px">
+      <h3>Campaigns</h3>
+      <div id="campaignList" style="margin-top:8px"></div>
+    </div>
+
+    <div class="card">
+      <h3>Reports</h3>
+      <div id="adminReportArea"></div>
+    </div>
+  </div>
+</body>
+</html>
