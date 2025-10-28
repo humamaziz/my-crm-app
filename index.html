@@ -4,371 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LeadFlow CRM</title>
+    
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+    
+    <!-- Main Application Script -->
+    <script src="script.js" defer></script>
+    
     <style>
-        /* General Reset & Theming */
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary-color: #10b981;
-            --danger-color: #ef4444;
-            --danger-hover: #dc2626;
-            --background-color: #f3f4f6;
-            --text-color: #1f2937;
-            --muted-text-color: #6b7280;
-            --card-background: #ffffff;
-            --border-color: #e5e7eb;
-            --header-background: #1f2937;
-            --header-text: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        /* Login Page */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: var(--header-background);
-        }
-
-        .login-card {
-            background-color: var(--card-background);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .login-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .login-logo svg {
-            width: 40px;
-            height: 40px;
-        }
-
-        .login-logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-color);
-        }
-
-        .login-card h2 {
-            margin-bottom: 24px;
-            color: var(--muted-text-color);
-            font-weight: 500;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* App Structure */
-        #app-container { display: none; }
-        .header {
-            background-color: var(--header-background);
-            color: var(--header-text);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-        }
-
-        .header-left { display: flex; align-items: center; gap: 24px; }
-        .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 20px; }
-        .logo svg { width: 32px; height: 32px; }
-
-        .navbar { display: flex; gap: 8px; }
-        .nav-link {
-            color: #d1d5db;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .nav-link:hover { background-color: #374151; color: var(--header-text); }
-        .nav-link.active { background-color: var(--primary-color); color: var(--header-text); }
-
-        .header-right { display: flex; align-items: center; gap: 16px; }
-        .user-info { font-size: 14px; color: #d1d5db; }
-        .user-info #user-email { font-weight: 600; color: var(--header-text); }
-        .user-info #user-role {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            text-transform: capitalize;
-            color: var(--header-text);
-        }
-
-        main {
-            padding: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* General Components */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .page-header h1 { font-size: 28px; font-weight: 700; }
-        
-        .btn {
-            padding: 10px 18px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        .btn:hover { background-color: var(--primary-hover); }
-        
-        .btn.ghost {
-            background-color: transparent;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-        }
-        .btn.ghost:hover { background-color: #f9fafb; }
-        
-        #logout-btn.btn.ghost { color: var(--header-text); border-color: rgba(255,255,255,0.3); }
-        #logout-btn.btn.ghost:hover { background-color: rgba(255,255,255,0.1); }
-
-        .btn.danger { background-color: var(--danger-color); }
-        .btn.danger:hover { background-color: var(--danger-hover); }
-        
-        .btn.small { padding: 6px 12px; font-size: 13px; }
-        .btn:disabled { background-color: #9ca3af; cursor: not-allowed; }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            background-color: #fff;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px #c7d2fe;
-        }
-        label { font-weight: 600; margin-bottom: 6px; display: block; font-size: 14px;}
-
-        .card {
-            background-color: var(--card-background);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.06);
-            margin-bottom: 24px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--card-background);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.06);
-        }
-        th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        thead { background-color: #f9fafb; }
-        th { font-size: 13px; font-weight: 600; color: var(--muted-text-color); text-transform: uppercase; letter-spacing: 0.5px; }
-        th.sortable { cursor: pointer; }
-        th.sortable:hover { background-color: #f3f4f6; }
-        tbody tr:last-child td { border-bottom: none; }
-        tbody tr:hover { background-color: #f9fafb; }
-        td { font-size: 14px; }
-        
-        .controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding-left: 12px;
-        }
-        .search-box svg { color: var(--muted-text-color); }
-        .search-box input { border: none; padding-left: 8px; }
-        .search-box input:focus { box-shadow: none; }
-
-        .pagination { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 20px; font-size: 14px; }
-        
-        /* Dashboard Specific */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-        .dashboard-card {
-            background-color: var(--card-background);
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.06);
-        }
-        .dashboard-card h3 {
-            font-size: 18px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .list-item:last-child { border-bottom: none; }
-        .list-item-main .name { font-weight: 600; }
-        .list-item-main .detail { font-size: 13px; color: var(--muted-text-color); }
-        .list-item-value { font-weight: 600; font-size: 16px; color: var(--primary-color); }
-        .list-item-value.secondary { color: var(--text-color); }
-
-        /* Lead Detail Page */
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            align-items: flex-start;
-        }
-        .lead-detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-        }
-        .lead-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        .info-box p { margin: 0; }
-        .info-box p strong { color: var(--muted-text-color); font-weight: 500; }
-        .activity-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .activity-item:first-child { padding-top: 0; }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .activity-type { font-weight: 600; }
-        .activity-meta { font-size: 13px; color: var(--muted-text-color); }
-        .activity-note { font-size: 14px; }
-        
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        
-        .progress-bar-container {
-            width: 100%;
-            height: 8px;
-            background-color: var(--border-color);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 4px;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: var(--secondary-color);
-            transition: width 0.3s ease-in-out;
-        }
-
-        /* Modal for CSV import */
-        .modal-backdrop {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none; /* Toggled by JS */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: #fff;
-            padding: 24px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-        }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;}
-        .modal-header h2 { font-size: 20px; }
-        .close-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted-text-color); }
-        #csv-upload-area {
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-        }
-        #csv-upload-area:hover { border-color: var(--primary-color); }
-        
-        @media (max-width: 900px) {
-            .detail-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 768px) {
-            .header-left { flex-grow: 1; }
-            .navbar { display: none; /* Could implement a hamburger menu here */ }
-            .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .form-grid-2 { grid-template-columns: 1fr; }
-        }
-
+        :root{--primary-color:#4f46e5;--primary-hover:#4338ca;--secondary-color:#10b981;--danger-color:#ef4444;--danger-hover:#dc2626;--background-color:#f8fafc;--text-color:#1f2937;--muted-text-color:#6b7280;--card-background:#ffffff;--border-color:#e5e7eb;--header-background:#ffffff;--header-text:#1f2937;--kpi-icon-bg-1:#e0e7ff;--kpi-icon-color-1:#4f46e5;--kpi-icon-bg-2:#d1fae5;--kpi-icon-color-2:#059669;--kpi-icon-bg-3:#ffedd5;--kpi-icon-color-3:#f97316;--kpi-icon-bg-4:#fee2e2;--kpi-icon-color-4:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background-color:var(--background-color);color:var(--text-color);line-height:1.5}
+        a{text-decoration:none;color:var(--primary-color);font-weight:500} a:hover{text-decoration:underline}
+        .login-container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:var(--background-color)}
+        .login-card{background-color:var(--card-background);padding:40px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.05);width:100%;max-width:400px;text-align:center}
+        .login-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}.login-logo svg{width:40px;height:40px}.login-logo h1{font-size:28px;font-weight:700;color:var(--text-color)}.login-card h2{margin-bottom:24px;color:var(--muted-text-color);font-weight:500}
+        .form-group{text-align:left;margin-bottom:20px}.form-group label{display:block;margin-bottom:8px;font-weight:600;font-size:14px}
+        #app-container{display:none}
+        .header{background-color:var(--header-background);color:var(--header-text);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid var(--border-color)}
+        .header-left{display:flex;align-items:center;gap:24px}.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:20px;color:var(--primary-color)}.logo svg{width:32px;height:32px}.navbar{display:flex;gap:8px}.nav-link{color:var(--muted-text-color);text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:500;transition:background-color .2s,color .2s}.nav-link:hover{background-color:#f3f4f6;color:var(--text-color)}.nav-link.active{background-color:var(--primary-color);color:#fff}
+        .header-right{display:flex;align-items:center;gap:16px}.user-info{font-size:14px;color:var(--muted-text-color)}.user-info #user-email{font-weight:600;color:var(--text-color)}.user-info #user-role{background-color:#eef2ff;color:var(--primary-color);padding:2px 8px;border-radius:10px;font-size:12px;text-transform:capitalize}
+        main{padding:24px;max-width:1600px;margin:0 auto}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.page-header h1{font-size:28px;font-weight:700}
+        .btn{padding:10px 18px;background-color:var(--primary-color);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:background-color .2s}.btn:hover{background-color:var(--primary-hover)}.btn.ghost{background-color:transparent;color:var(--text-color);border:1px solid var(--border-color)}.btn.ghost:hover{background-color:#f9fafb}
+        .btn.danger{background-color:var(--danger-color)}.btn.danger:hover{background-color:var(--danger-hover)}.btn.small{padding:6px 12px;font-size:13px}.btn:disabled{background-color:#9ca3af;cursor:not-allowed}
+        input,select,textarea{width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background-color:#fff}input:focus,select:focus,textarea:focus{outline:0;border-color:var(--primary-color);box-shadow:0 0 0 2px #c7d2fe}
+        label{font-weight:600;margin-bottom:6px;display:block;font-size:14px;color:#374151}
+        .card{background-color:var(--card-background);padding:24px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--border-color);margin-bottom:24px}
+        table{width:100%;border-collapse:collapse;background-color:var(--card-background);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid var(--border-color)}th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border-color)}thead{background-color:#f9fafb}th{font-size:13px;font-weight:600;color:var(--muted-text-color);text-transform:uppercase;letter-spacing:.5px}tbody tr:last-child td{border-bottom:none}tbody tr:hover{background-color:#f9fafb}td{font-size:14px;color:#374151}
+        .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:24px}
+        .kpi-card{background-color:#fff;border-radius:12px;border:1px solid var(--border-color);padding:24px;display:flex;align-items:center;gap:20px}
+        .kpi-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .kpi-card:nth-child(1) .kpi-icon{background-color:var(--kpi-icon-bg-1);color:var(--kpi-icon-color-1)}
+        .kpi-card:nth-child(2) .kpi-icon{background-color:var(--kpi-icon-bg-2);color:var(--kpi-icon-color-2)}
+        .kpi-card:nth-child(3) .kpi-icon{background-color:var(--kpi-icon-bg-3);color:var(--kpi-icon-color-3)}
+        .kpi-card:nth-child(4) .kpi-icon{background-color:var(--kpi-icon-bg-4);color:var(--kpi-icon-color-4)}
+        .kpi-info h3{font-size:28px;font-weight:700;color:var(--text-color)}
+        .kpi-info p{font-size:14px;color:var(--muted-text-color);margin:0}
+        .filter-card{padding:16px 24px}
+        .filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+        .detail-grid{display:grid;grid-template-columns:1fr 400px;gap:24px;align-items:flex-start}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .status-badge{padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;text-transform:capitalize}
+        .status-badge.dmed{background-color:#e0e7ff;color:#4338ca}
+        .status-badge.success{background-color:#d1fae5;color:#065f46}
+        .status-badge.new{background-color:#f3f4f6;color:#4b5563}
+        @media (max-width:1200px){.detail-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-
-    <!-- LOGIN VIEW -->
     <div id="login-view">
         <div class="login-container">
-            <div class.login-card">
+            <div class="login-card">
                 <div class="login-logo">
                     <svg fill="var(--primary-color)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
                     <h1>LeadFlow</h1>
@@ -376,64 +65,36 @@
                 <h2 id="login-title">Login to your account</h2>
                 <form id="login-form">
                     <div id="name-group" class="form-group" style="display: none;">
-                        <label for="name">Full Name</label>
-                        <input type="text" id="name" name="name">
+                        <label for="name">Full Name</label><input type="text" id="name" name="name">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
+                        <label for="email">Email Address</label><input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
+                        <label for="password">Password</label><input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" id="login-button" class="btn" style="width: 100%;">Login</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- MAIN APP VIEW -->
-    <div id="app-container">
+    <div id="app-container" style="display: none;">
         <header class="header">
             <div class="header-left">
                 <div class="logo">
-                    <svg fill="var(--header-text)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
+                    <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.61 6.34c1.07 0 1.93.86 1.93 1.93s-.86 1.93-1.93 1.93-1.93-.86-1.93-1.93.86-1.93 1.93-1.93zm-6-1.5c.66 0 1.2.54 1.2 1.2s-.54 1.2-1.2 1.2-1.2-.54-1.2-1.2.54-1.2 1.2-1.2zm-2.29 4.25c-.78 0-1.42.63-1.42 1.42s.63 1.42 1.42 1.42 1.42-.63 1.42-1.42-.64-1.42-1.42-1.42zm3.69 4.41c-2.93 0-5.32-2.39-5.32-5.32 0-.43.05-.86.15-1.27l7.46 7.46c-.41.1-.84.15-1.27.15zm5.09-2.02c.07.41.1.84.1 1.27 0 2.93-2.39 5.32-5.32 5.32-.43 0-.86-.05-1.27-.15L17.1 9.48z"/></svg>
                     <span>LeadFlow</span>
                 </div>
-                <nav id="navbar" class="navbar">
-                    <!-- Nav links will be injected here -->
-                </nav>
+                <nav id="navbar" class="navbar"></nav>
             </div>
             <div class="header-right">
                 <div class="user-info">
                     <span id="user-email"></span> | <span id="user-role"></span>
                 </div>
-                <button id="logout-btn" class="btn ghost small">Logout</button>
+                <button id="logout-btn" class="btn small ghost">Logout</button>
             </div>
         </header>
-
-        <main id="main-content">
-            <!-- Dynamic content will be rendered here -->
-        </main>
+        <main id="main-content"></main>
     </div>
-    
-    <!-- CSV Import Modal -->
-    <div id="csv-modal" class="modal-backdrop">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="csv-modal-title">Import Data</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div id="csv-upload-area">
-                <p>Drag & drop a CSV file here, or click to select a file.</p>
-                <small>File must have headers matching the required fields.</small>
-            </div>
-            <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
-        </div>
-    </div>
-
-    <!-- The script will be loaded from the external script.js file -->
-    <script src="script.js"></script>
 </body>
 </html>
